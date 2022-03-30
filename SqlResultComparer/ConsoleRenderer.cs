@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace SqlResultComparer
 {
-    internal static class ConsoleRenderer
+    static class ConsoleRenderer
     {
         public static void Render(string[] lines, string[] parameternames, string[] parametervalues)
         {
@@ -19,10 +19,12 @@ namespace SqlResultComparer
                             Console.BackgroundColor = ConsoleColor.Red;
                         }
                         else if (Regex.Match(fi, "=").Success) Console.ForegroundColor = ConsoleColor.Green;
+
                         Console.Write(fi);
                         Console.ResetColor();
                         Console.Write('|');
                     }
+
                     Console.WriteLine();
                 }
                 else
@@ -31,6 +33,7 @@ namespace SqlResultComparer
                     else if (Regex.Match(line, "=").Success) Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine(line);
                 }
+
                 Console.ResetColor();
             }
         }

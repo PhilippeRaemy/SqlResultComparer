@@ -10,7 +10,7 @@ using MoreLinq;
 
 namespace SqlResultComparer
 {
-    internal class HtmlRenderer
+    class HtmlRenderer
     {
         public bool AutoOpen { get; set; }
 
@@ -37,13 +37,14 @@ namespace SqlResultComparer
                     .Where(li => li.Match(@"[^ \-|]").Success))
                 {
                     var split = line.Split('|');
-                    if (split.Length ==2 && Regex.Match(split[0], "=").Success)
+                    if (split.Length == 2 && Regex.Match(split[0], "=").Success)
                     {
                         if (inTable)
                         {
                             writer.WriteLine("</table>");
                             inTable = false;
                         }
+
                         writer.WriteLine($"<span class=\"same\">{line}</span>");
                     }
                     else if (split.Length > 2)
@@ -51,25 +52,27 @@ namespace SqlResultComparer
                         var trClass = Regex.Match(line, "<>").Success
                             ? "diff"
                             : Regex.Match(line, "[<>]").Success
-                            ? "new"
-                            : Regex.Match(line, "=").Success
-                            ? "same"
-                            : "default";
+                                ? "new"
+                                : Regex.Match(line, "=").Success
+                                    ? "same"
+                                    : "default";
                         if (inParagraph)
                         {
                             writer.WriteLine("</p>");
                             inParagraph = false;
                         }
+
                         if (!inTable)
                         {
                             writer.WriteLine("<table border=1 cellspacing=0>");
                             inTable = true;
                         }
+
                         writer.WriteLine($"<tr class=\"{trClass}\">");
                         writer.WriteLine(split
                             .Select(fi => $"<td class=\"{TdClass(trClass, fi)}\">{fi}</td>")
                             .ToDelimitedString(string.Empty)
-                            );
+                        );
                         writer.WriteLine("</tr>");
                     }
                     else
@@ -79,24 +82,23 @@ namespace SqlResultComparer
                             writer.WriteLine("</table>");
                             inTable = false;
                         }
+
                         writer.WriteLine($"<p class=\"title\">{line}");
                         inParagraph = true;
                     }
                 }
-                if(inTable) writer.WriteLine("</table>");
-                writer.WriteLine("</body></html>");
 
+                if (inTable) writer.WriteLine("</table>");
+                writer.WriteLine("</body></html>");
             }
-            if(AutoOpen) Process.Start(filename);
+
+            if (AutoOpen) Process.Start(filename);
             Console.WriteLine($"Created file {filename}.");
         }
 
-        private static string TdClass(string trClass, string fi)
-        {
-            return trClass == "new"             ? trClass
-                : trClass == "default"          ? trClass
+        static string TdClass(string trClass, string fi)
+            => trClass == "new" ? trClass
+                : trClass == "default" ? trClass
                 : Regex.Match(fi, "<>").Success ? "diff" : "same";
-        }
-
     }
 }

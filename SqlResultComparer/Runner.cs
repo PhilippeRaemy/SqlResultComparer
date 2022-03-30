@@ -46,7 +46,7 @@ namespace SqlResultComparer
             }
         }
 
-        private static string[] RunOne(Action<string> consoleWriter, string[] parmNames, Action<string[], string[], string[]> resultsWriter, string[] parmValues, SqlCommand leftCmd, SqlCommand rightCmd)
+        static string[] RunOne(Action<string> consoleWriter, string[] parmNames, Action<string[], string[], string[]> resultsWriter, string[] parmValues, SqlCommand leftCmd, SqlCommand rightCmd)
         {
             foreach (var p in parmNames.Zip(
                 parmValues,
@@ -93,7 +93,7 @@ namespace SqlResultComparer
 
             using (readerRefs[left.Index])
             using (readerRefs[right.Index])
-            {
+            { 
                 while (flights.Count > 0)
                 {
                     var index = WaitHandle.WaitAny(flights.Select(ar => ar.AsyncResult.AsyncWaitHandle).ToArray());
@@ -148,7 +148,7 @@ namespace SqlResultComparer
             return lines;
         }
 
-        private static async Task<Results> ResultsFromReader(SqlDataReader reader)
+        static async Task<Results> ResultsFromReader(SqlDataReader reader)
         {
             var results = new Results();
             await Task.Run(() => results.AddReader(reader));

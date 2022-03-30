@@ -11,8 +11,7 @@ namespace SqlResultComparer
 
     static class Program
     {
-
-        private static int Main(string[] args)
+        static int Main(string[] args)
         {
             var leftConnStr    = string.Empty;
             var rightConnStr   = string.Empty;
@@ -108,7 +107,7 @@ namespace SqlResultComparer
             }
         }
 
-        private static void Pauser(int loopCount, int pause)
+        static void Pauser(int loopCount, int pause)
         {
             if (pause == 0) return;
             Console.ForegroundColor = ConsoleColor.DarkBlue;
@@ -127,7 +126,7 @@ namespace SqlResultComparer
             Console.ResetColor();
         }
 
-        private static string ParseSrv(string s)
+        static string ParseSrv(string s)
         {
             var parsed = s.Split('.');
             var srv = parsed[0];

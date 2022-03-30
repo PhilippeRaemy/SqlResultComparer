@@ -21,6 +21,7 @@ namespace ResultsComparer
                     this[resultName].Add(rec);
                 }
             } while (reader.NextResult());
+
             return this;
         }
 
@@ -39,24 +40,21 @@ namespace ResultsComparer
             foreach (var key in Keys)
             {
                 if (other.ContainsKey(key) && this[key].Equals(other[key]))
-                {
                     diff.Add(key, equalMsg);
-                }
                 else
-                {
-                    diff.Add(key, !other.ContainsKey(key) ? this[key].Diff(new Result(), ignoredColumns) : this[key].Diff(other[key], ignoredColumns, alignOnFirst));
-                }
+                    diff.Add(key,
+                        !other.ContainsKey(key)
+                            ? this[key].Diff(new Result(), ignoredColumns)
+                            : this[key].Diff(other[key], ignoredColumns, alignOnFirst));
             }
+
             foreach (var key in other.Keys.Where(k => !ContainsKey(k)))
-            {
                 diff.Add(key, new Result().Diff(other[key], ignoredColumns, alignOnFirst));
-            }
             return diff;
         }
-        public override string ToString()
-        {
-            return string.Join("\r\n\r\n",
-                               this.Select(r => string.Format("{0}\r\n{1}\r\n{0}\r\n{2}", new string('-', r.Key.Length), r.Key, r.Value.ToString())));
-        }
+
+        public override string ToString() =>
+            string.Join("\r\n\r\n",
+                this.Select(r => string.Format("{0}\r\n{1}\r\n{0}\r\n{2}", new string('-', r.Key.Length), r.Key, r.Value)));
     }
 }

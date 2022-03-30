@@ -3,11 +3,11 @@ using System.Threading;
 
 namespace SqlResultComparer
 {
-    internal static class ConsoleReader
+    static class ConsoleReader
     {
-        private static readonly AutoResetEvent GetInput;
-        private static readonly AutoResetEvent GotInput;
-        private static string _input;
+        static readonly AutoResetEvent GetInput;
+        static readonly AutoResetEvent GotInput;
+        static string _input;
 
         static ConsoleReader()
         {
@@ -17,7 +17,7 @@ namespace SqlResultComparer
             inputThread.Start();
         }
 
-        private static void Reader()
+        static void Reader()
         {
             while (true)
             {
@@ -28,7 +28,7 @@ namespace SqlResultComparer
             }
         }
 
-        public static string ReadLine(int timeOutMillisecs, bool throwTimeoutException=true)
+        public static string ReadLine(int timeOutMillisecs, bool throwTimeoutException = true)
         {
             GetInput.Set();
             var success = GotInput.WaitOne(timeOutMillisecs);
@@ -36,6 +36,7 @@ namespace SqlResultComparer
             {
                 throw new TimeoutException("User did not provide input within the timelimit.");
             }
+
             return _input;
         }
     }
